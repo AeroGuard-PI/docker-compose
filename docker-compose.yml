@@ -1,0 +1,48 @@
+version: '3.8'
+
+# 1. Criação da Rede Docker
+networks:
+  aeroguard-net:
+    driver: bridge
+
+# 2. Volume Persistente pra nao perder os dados caso o container caia
+volumes:
+  aeroguard-data:
+
+# 3. Definição dos Serviços (Containers)
+services:
+
+  # Serviço 1: Banco de Dados
+  aeroguard-db:
+    image: hnrq7/aeroguard-db:1.2
+    container_name: aeroguard-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: urubu100
+    ports:
+      - "3306:3306"
+    volumes:
+      - aeroguard-data:/var/lib/mysql
+    networks:
+      - aeroguard-net
+    # Healthcheck: verifica se o MySQL já terminou de subir antes de liberar o site
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-purubu100"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Serviço 2: Site e dashboard
+  aeroguard-site:
+    image: hnrq7/aeroguard-site:1.2
+    container_name: aeroguard-site
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      aeroguard-db:
+        condition: service_healthy
+    networks:
+      - aeroguard-net
