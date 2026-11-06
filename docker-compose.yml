@@ -34,7 +34,7 @@ services:
 
   # Serviço 2: Site e dashboard
   aeroguard-site:
-    image: hnrq7/aeroguard-site:1.2
+    image: hnrq7/aeroguard-site:1.5
     container_name: aeroguard-site
     restart: always
     ports:
