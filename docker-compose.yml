@@ -14,7 +14,7 @@ services:
 
   # Serviço 1: Banco de Dados
   aeroguard-db:
-    image: hnrq7/aeroguard-db:1.3
+    image: hnrq7/aeroguard-db:1.4
     container_name: aeroguard-db
     restart: always
     environment:
@@ -34,7 +34,7 @@ services:
 
   # Serviço 2: Site e dashboard
   aeroguard-site:
-    image: hnrq7/aeroguard-site:1.6
+    image: hnrq7/aeroguard-site:1.7
     container_name: aeroguard-site
     restart: always
     ports:
